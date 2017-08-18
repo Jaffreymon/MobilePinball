@@ -15,12 +15,12 @@ public class GameManager : MonoBehaviour {
     GameObject ball;
 
     // Detects if the game is paused
-    bool isGamePaused;
+    bool isGamePaused = false;
 
 
 	// Use this for initialization
 	void Start () {
-		
+        highScore = PlayerPrefs.GetInt("playerHighScore", 0);
 	}
 	
 	// Update is called once per frame

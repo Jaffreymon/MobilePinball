@@ -1,21 +1,37 @@
-﻿public class LeftBumper : Bumper
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public class LeftBumper : MonoBehaviour
 {
 
-    // Use this for initialization
+    // List of sounds when ball collides with this bumper
+    List<AudioClip> hitSFX;
+
+    // Gameobject of bumper's hinge
+    [SerializeField]
+    private HingeJoint bumper;
+
+    [SerializeField]
+    private JointMotor bumperMotor;
+
+    // Target force of bumper
+    float appliedTargetVelocity = 750f;
+
     void Start()
     {
-
+        bumper = GetComponent<HingeJoint>();
+        bumperMotor = bumper.motor;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
-
-    public override void activateBumper()
+    public void toggleBumper()
     {
-        // Activate bumper where left end moves
-        // Play sound of bumper activating
+        // Negates targetVelocity
+        appliedTargetVelocity = -appliedTargetVelocity;
+        // Applies targetVelocity
+        bumperMotor.targetVelocity = appliedTargetVelocity;
+
+        // Reassign motor to hinge joint
+        bumper.motor = bumperMotor;
     }
 }
