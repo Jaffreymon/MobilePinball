@@ -15,11 +15,12 @@ public class LeftBumper : MonoBehaviour
     private JointMotor bumperMotor;
 
     // Target force of bumper
-    float appliedTargetVelocity = 750f;
+    float appliedTargetVelocity;
 
     void Start()
     {
         bumper = GetComponent<HingeJoint>();
+        appliedTargetVelocity = bumper.motor.targetVelocity;
         bumperMotor = bumper.motor;
     }
 

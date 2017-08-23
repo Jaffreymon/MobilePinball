@@ -2,24 +2,21 @@
 
 public class BallBehavior : MonoBehaviour {
 
-    // Mass of ball
-    float mass;
-
-    // The amount of drag the ball faces
-    float drag;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-    void addForce(float _force, Vector3 _direction)
+    // Set position to a specified spawn point
+    public void setBallPos(Transform _ballSpawn)
     {
-        // Applies a force to this ball with a direction
+        gameObject.SetActive(false);
+
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        transform.position = _ballSpawn.position;
+
+        gameObject.SetActive(true);
+    }
+
+    // Adds force to the ball given it's in the specified area
+    public void addForce(float _force, Vector3 _direction)
+    {
+        // Applies a force to this ball with a velocity of given transform
+        GetComponent<Rigidbody>().AddForce(_force * _direction, ForceMode.Impulse);
     }
 }
