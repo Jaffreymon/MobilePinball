@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class GameManager : MonoBehaviour {
     // The high score saved on this device
     int highScore;
     // The total remaining lives
-    int ballsRemaining;
+    int ballsRemaining = 3;
 
     // Reference to game's menu
     [SerializeField]
@@ -37,6 +38,15 @@ public class GameManager : MonoBehaviour {
     // ball spawn indices
     const int startPosIdx = 0;
 
+    // Reference to Score text
+    [SerializeField]
+    TextMeshProUGUI scoreText;
+
+    //Reference to Ball text
+    [SerializeField]
+    TextMeshProUGUI ballText;
+
+
     // Detects if the game is paused
     bool isGamePaused = false;
 
@@ -45,6 +55,9 @@ public class GameManager : MonoBehaviour {
 	void Start () {
         highScore = PlayerPrefs.GetInt("playerHighScore", 0);
         ball = GameObject.FindGameObjectWithTag("Ball").GetComponent<BallBehavior>();
+
+        scoreText.text = currScore.ToString();
+        ballText.text = ballsRemaining.ToString();
 	}
 
     // returns if game is paused
@@ -73,16 +86,33 @@ public class GameManager : MonoBehaviour {
     {
         ball.setBallPos(ballSpawns[_idx]);
     }
+    // Sets the textMeshPro text
+    void setTMProText(TextMeshProUGUI _UI, string _text)
+    {
+        _UI.text = _text;
+    }
 
     // Resets the ball position and hidden walls
     public void resetLevel()
     {
-        springUI.value = 0f;
-        setBallPosition(startPosIdx);
+        // Decrement ball value after each reset
+        ballsRemaining--;
+        setTMProText(ballText, ballsRemaining.ToString());
 
-        foreach(WallBehavior child in safetyWallsHolder.GetComponentsInChildren<WallBehavior>())
+        if (ballsRemaining > 0)
         {
-            child.toggleWallCollision(false);
+            springUI.value = 0f;
+            setBallPosition(startPosIdx);
+
+            foreach (WallBehavior child in safetyWallsHolder.GetComponentsInChildren<WallBehavior>())
+            {
+                child.toggleWallCollision(false);
+            }
+
+        }
+        else
+        {
+            // GameOver
         }
     }
 
