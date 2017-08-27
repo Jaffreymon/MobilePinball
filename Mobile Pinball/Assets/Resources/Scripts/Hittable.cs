@@ -5,7 +5,11 @@ using UnityEngine;
 public class Hittable : MonoBehaviour {
 
     // Point value if this object is collided
-    const int score = 500;
+    [SerializeField]
+    int score = 500;
+
+    // Force to pushback ball when hit
+    const float pushbackForce = 10f;
 
     // Sound of bumper when hit
     AudioClip hitSFX;
@@ -14,6 +18,8 @@ public class Hittable : MonoBehaviour {
     Light lightFX;
 
     // Reference to gameManager
+    [SerializeField]
+    GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
@@ -38,6 +44,7 @@ public class Hittable : MonoBehaviour {
     void addScore()
     {
         // Adds score value to current score
+        gameManager.setScore(gameManager.getCurrScore() + score);
     }
 
     public void onHit()
@@ -46,5 +53,17 @@ public class Hittable : MonoBehaviour {
             // Plays sound
             // Enable light for brief moment
             // Adds to total score
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.transform.tag == "Ball")
+        {
+            GameObject ball = collision.gameObject;
+            Vector3 reverseVector2D = new Vector3(ball.transform.forward.x, 0f, ball.transform.forward.z);
+            ball.GetComponent<BallBehavior>().addForce(10f, reverseVector2D);
+
+            addScore();
+        }
     }
 }

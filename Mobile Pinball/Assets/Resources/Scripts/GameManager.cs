@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour {
     // ball spawn indices
     const int startPosIdx = 0;
 
+    // Empty string to save heap space
+    const string emptyString = "";
     // Reference to Score text
     [SerializeField]
     TextMeshProUGUI scoreText;
@@ -60,6 +62,11 @@ public class GameManager : MonoBehaviour {
         ballText.text = ballsRemaining.ToString();
 	}
 
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
+
     // returns if game is paused
     bool isPause() { return isGamePaused; }
     // Inverts the current state of the game 
@@ -71,16 +78,16 @@ public class GameManager : MonoBehaviour {
     // Gets the springUI
     public Slider getSpringUI() { return springUI; }
     // Gets current score of session
-    int getCurrScore() { return currScore; }
+    public int getCurrScore() { return currScore; }
     // Gets highest score on device
-    int getHighScore() { return highScore; }
+    public int getHighScore() { return highScore; }
     // Gets remaining lives
     int getBallsRemaining() { return ballsRemaining; }
 
     // Sets the ball count
     void setBallCount(int _ballCount) { ballsRemaining = _ballCount; }
     // Sets the current score
-    void setScore(int _score) { currScore = _score; }
+    public void setScore(int _score) { currScore = _score; scoreText.text = emptyString + currScore; }
     // Sets the position of the ball to one of specified spawn points
     void setBallPosition(int _idx)
     {
@@ -96,7 +103,7 @@ public class GameManager : MonoBehaviour {
     public void resetLevel()
     {
         // Decrement ball value after each reset
-        ballsRemaining--;
+        //ballsRemaining--;
         setTMProText(ballText, ballsRemaining.ToString());
 
         if (ballsRemaining > 0)
@@ -122,6 +129,7 @@ public class GameManager : MonoBehaviour {
         ball.addForce(mainBallStart.getSliderVal(), ballSpawns[startPosIdx].forward);
     }
 
+    // Toggles the visibility of spring UI
     public void toggleSpringUI(bool _isActive)
     {
         springUI.gameObject.SetActive(_isActive);

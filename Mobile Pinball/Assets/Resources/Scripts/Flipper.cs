@@ -10,45 +10,45 @@ public class Flipper : MonoBehaviour
 
     // Gameobject of bumper's hinge
     [SerializeField]
-    private HingeJoint bumper;
+    private HingeJoint flipper;
 
-    // Motor that moves the hinge
+    // Spring that moves the hinge
     [SerializeField]
-    private JointMotor bumperMotor;
+    private JointSpring flipperSpring;
 
     // Touch Response Image
     [SerializeField]
     Image touchImage;
-    bool isTouchDown;
     // Alpha of image 
     const float textAlpha = 0.2f;
     // White Color with textAlpha
     Color _white = new Color(1, 1, 1, textAlpha);
     // Magenta Color with textAlpha
     Color _magenta = new Color(1, 0, 1, textAlpha);
+    // Tracks if touch is down
+    bool isTouchDown;
 
-    // Target force of bumper
-    float appliedTargetVelocity;
+    // Max positiong of spring 
+    const float springPosition = 200f;
+    // Rest position of spring
+    const float restPosition = 0f;
+
 
     void Start()
     {
-        bumper = GetComponent<HingeJoint>();
-        appliedTargetVelocity = bumper.motor.targetVelocity;
-        bumperMotor = bumper.motor;
+        flipper = GetComponent<HingeJoint>();
+
+        flipperSpring = flipper.spring;
     }
 
 
     public void toggleBumper()
     {
-        // Negates targetVelocity
-        appliedTargetVelocity = -appliedTargetVelocity;
-        // Applies targetVelocity
-        bumperMotor.targetVelocity = appliedTargetVelocity;
-
+        // Changes flipper position if on touch
+        flipperSpring.targetPosition = (isTouchDown = !isTouchDown) ?  springPosition : restPosition;
         // Changes color of touch image if on touch
-        touchImage.color = (isTouchDown = !isTouchDown) ? _magenta : _white ;
+        touchImage.color = (isTouchDown) ? _magenta : _white;
 
-        // Reassign motor to hinge joint
-        bumper.motor = bumperMotor;
+        flipper.spring = flipperSpring;
     }
 }

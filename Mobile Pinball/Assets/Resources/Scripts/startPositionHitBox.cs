@@ -23,7 +23,6 @@ public class startPositionHitBox : MonoBehaviour {
     {
         if (other.tag == "Ball")
         {
-            Debug.Log("Stay");
             gameManager.toggleSpringUI(true);
         }
     }
@@ -32,7 +31,6 @@ public class startPositionHitBox : MonoBehaviour {
     {
         if (other.tag == "Ball")
         {
-            Debug.Log("Exit");
             gameManager.toggleSpringUI(false);
             springUI.value = 0;
         }
